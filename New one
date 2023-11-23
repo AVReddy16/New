@@ -1,0 +1,57 @@
+#include <iostream>
+#include <vector>
+ 
+std::string LCSubStr(const std::string& str1, const std::string& str2) {
+   int N = str1.length();
+   int M = str2.length();
+ 
+   std::vector<std::vector<int>> LCSuff(N + 1, std::vector<int>(M + 1, 0));
+   int maxLength = 0;
+   int endIndex = 0;
+ 
+   for (int i = 0; i <= N; i++) {
+       for (int j = 0; j <= M; j++) {
+           if (i == 0 || j == 0) {
+               LCSuff[i][j] = 0;
+           } else if (str1[i - 1] == str2[j - 1]) {
+               LCSuff[i][j] = LCSuff[i - 1][j - 1] + 1;
+               if (LCSuff[i][j] > maxLength) {
+                   maxLength = LCSuff[i][j];
+                   endIndex = i - 1;
+               }
+           } else {
+               LCSuff[i][j] = 0;
+           }
+       }
+   }
+ 
+   if (maxLength == 0) {
+       // No common substring found
+       return "";
+   } else {
+       // Extract the longest common substring
+       return str1.substr(endIndex - maxLength + 1, maxLength);
+   }
+}
+ 
+int main() {
+   std::string str1, str2;
+ 
+   // Input the first string
+   std::cout << "Enter the first string: ";
+   std::cin >> str1;
+ 
+   // Input the second string
+   std::cout << "Enter the second string: ";
+   std::cin >> str2;
+ 
+   std::string result = LCSubStr(str1, str2);
+ 
+   if (!result.empty()) {
+       std::cout << "Longest Common Substring: " << result << std::endl;
+   } else {
+       std::cout << "No common substring found." << std::endl;
+   }
+ 
+   return 0;
+}
